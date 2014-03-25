@@ -4,13 +4,11 @@ public class RunTanks extends Thread{
 	private Tank curTank;
 	private int rot;
 	RunTanks( String name, Tank tank){
-		System.out.println("Creating " +  name + " with tank " + tank.getName());
+		System.out.println("Creating " +  name + " with " + tank.getName());
 		curTank = tank;
-		rot = tank.getRot();
+		setRot(tank.getRot());
 	}
 	public void run() {
-		System.out.println("running with tank " + curTank.getName());
-		
 		curTank.run();
 		
 	}
@@ -19,4 +17,10 @@ public class RunTanks extends Thread{
 		curTank.wait = 30;
 		 
 	 }
+	public int getRot() {
+		return rot;
+	}
+	public void setRot(int rot) {
+		this.rot = rot;
+	}
 }

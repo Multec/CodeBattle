@@ -12,7 +12,8 @@ public class SmallTank2 extends Tank{
 	}
 
 	public void run(){
-		super.setRotation(20);
+		super.setRotation(rot);
+		rot++;
 		super.shoot();
 		super.speed = 4;
 		super.run();

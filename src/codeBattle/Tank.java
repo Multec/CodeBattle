@@ -13,16 +13,16 @@ public class Tank {
 	PApplet app;
 	public float speed;
 	public double rot;
-	private boolean shot = false;
-	public int health;
+	public boolean shot = false;
+	public int health = 100;
 	public float xpos;
 	public float ypos;
 	public int wait = 0;
 	public boolean alive;
-	private boolean found = false;
-	private Bullet b;
-	PShape tank = new PShape();
+	public Bullet b;
 	private String name;
+	
+	TankImg t;
 	
 	public Tank(PApplet app, String name) {
 		this.app = app;
@@ -30,20 +30,19 @@ public class Tank {
 		xpos = 0;
 		ypos = 0;
 		this.name = name;
+		t = new TankImg(this.app);
 
 		speed = 1;
-		try{
-			tank = app.loadShape("data/tank.svg");
-			found = true;
-		} catch (NullPointerException e){
-			System.out.println("tank doesn't exist");
-		}
+		
 	}
 	public void draw(){
 		
 	}
 	public void run(){
 		if(alive){
+			if(health<0){
+				alive = false;
+			}
 			if(wait == 0){
 				if(this.speed <3){
 					speed = 3;
@@ -57,16 +56,13 @@ public class Tank {
 				b.draw();
 				if(b.xpos <0 || b.ypos<0 || b.xpos >1024 || b.ypos>768){
 					shot = false;
+					b.die();
 				}
 			}
-			if(found){
-				app.shape(tank, this.xpos, this.ypos);
-			} else {
-				this.app.fill(0);
-				this.app.rect(this.xpos, this.ypos, 35, 45);
-			}
+			t.draw(rot, 0, xpos, ypos);
+			
 		}
-		System.out.println("running");
+		
 	}
 	public void shoot(){
 		if(shot){
@@ -87,10 +83,28 @@ public class Tank {
 		this.speed = speed;
 	}
 	private float calculateXpos(){
-		return  (Math.round(Math.cos(rot) * speed + xpos));
+		float x = (Math.round(Math.cos(rot) * speed + xpos));
+		if(x>980){
+			this.speed = 0;
+			return 980;
+		} else if(x<0){
+			this.speed = 0;
+			return 0;
+		} else {
+			return x;
+		}
 	}
 	private float calculateYpos(){
-		return (Math.round(Math.sin(rot) * speed + ypos));
+		float y = (Math.round(Math.sin(rot) * speed + ypos));
+		if(y>768){
+			this.speed = 0;
+			return 768;
+		} else if(y<0){
+			this.speed = 0;
+			return 0;
+		} else {
+			return y;
+		}
 	}
 	public void setWait(int wait){
 		this.wait = wait;
