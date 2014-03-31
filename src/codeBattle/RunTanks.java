@@ -23,4 +23,10 @@ public class RunTanks extends Thread{
 	public void setRot(int rot) {
 		this.rot = rot;
 	}
+	public float getPosX(){
+		return curTank.xpos;
+	}
+	public float getPosY(){
+		return curTank.ypos;
+	}
 }

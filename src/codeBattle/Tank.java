@@ -22,6 +22,9 @@ public class Tank {
 	public Bullet b;
 	private String name;
 	
+	private float otherTankX;
+	private float otherTankY;
+	
 	TankImg t;
 	
 	public Tank(PApplet app, String name) {
@@ -115,5 +118,19 @@ public class Tank {
 	public String getName(){
 		return name;
 	}
-	
+	public float getOtherTankX(){
+		return otherTankX;
+	}
+	public float getOtherTankY(){
+		return otherTankY;
+	}
+	public void setOtherX(float otherX){
+		this.otherTankX = otherX;
+	}
+	public void setOtherY(float otherY){
+		this.otherTankY = otherY;
+	}
+	public void setSpeed(int speed){
+		this.speed = speed;
+	}
 }
