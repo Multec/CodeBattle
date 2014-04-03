@@ -61,7 +61,7 @@ public class Tank {
 					b.die();
 				}
 			}
-			t.draw(rot, 0, xpos, ypos);
+			t.draw(rot, 0, xpos, ypos, name);
 		}
 		
 	}

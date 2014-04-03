@@ -6,8 +6,8 @@ import processing.core.*;
 public class Main extends PApplet {
 	int rot = 0;
 	
-	private SmallTank1 tank1 = new SmallTank1(this, "tank1");
-	private SmallTank2 tank2 = new SmallTank2(this, "tank2");
+	private SmallTank1 tank1 = new SmallTank1(this, "tank_k");
+	private SmallTank2 tank2 = new SmallTank2(this, "tank_u");
 	private RunTanks T1;
 	private RunTanks T2;
 	private int framesEllapsed = 0;
