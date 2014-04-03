@@ -19,10 +19,11 @@ public class TankImg {
 	}
 	public void draw(double rot, int col, float xpos, float ypos){
 		app.pushMatrix();
-		app.translate(xpos+32, ypos+25);
+		app.translate(xpos, ypos);
 		app.rotate((float) rot+app.HALF_PI);
-		System.out.println(rot);
 		app.image(img, -32, -25, 51, 64);
+		app.fill(0, 50);
+		app.rect(-32, -25, 51, 64);
 		app.popMatrix();
 	}
 }

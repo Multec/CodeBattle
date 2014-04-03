@@ -14,7 +14,7 @@ public class Tank {
 	public float speed;
 	public double rot;
 	protected boolean shot = false;
-	protected int health = 100;
+	private int health = 100;
 	private float xpos;
 	private float ypos;
 	public int wait = 0;
@@ -30,11 +30,10 @@ public class Tank {
 	public Tank(PApplet app, String name) {
 		this.app = app;
 		alive = true;
-		xpos = 0;
-		ypos = 0;
+		xpos = (float) (Math.random()*980);
+		ypos = (float) (Math.random()*700);
 		this.name = name;
 		t = new TankImg(this.app);
-
 		speed = 1;
 		
 	}
@@ -86,24 +85,30 @@ public class Tank {
 	}
 	private float calculateXpos(){
 		float x = (Math.round(Math.cos(rot) * speed + xpos));
-		if(x>980){
+		if(x>999){
 			this.speed = 0;
-			return 980;
-		} else if(x<0){
+			return 999;
+		} else if(x<32){
 			this.speed = 0;
-			return 0;
+			return 32;
+		} else  if(x-otherTankX<25 && x-otherTankX>-25){
+			this.speed = 0;
+			return x;
 		} else {
 			return x;
 		}
 	}
 	private float calculateYpos(){
 		float y = (Math.round(Math.sin(rot) * speed + ypos));
-		if(y>768){
+		if(y>736){
 			this.speed = 0;
-			return 768;
-		} else if(y<0){
+			return 736;
+		} else if(y<25){
 			this.speed = 0;
-			return 0;
+			return 25;
+		} else if(y-otherTankY<25 && y-otherTankY>-25){
+			this.speed = 0;
+			return y;
 		} else {
 			return y;
 		}
@@ -134,6 +139,9 @@ public class Tank {
 	}
 	public int getHealth(){
 		return this.health;
+	}
+	public void decreaseHealth(){
+		this.health-=11;
 	}
 	public float getXpos() {
 		return xpos;

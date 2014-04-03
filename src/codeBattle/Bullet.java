@@ -10,7 +10,6 @@ public class Bullet {
 	public PApplet app;
 	private boolean alive = true;
 	public Bullet(int xpos, int ypos, double dir, PApplet app){
-		//this.dir = (dir * Math.PI / 180);
 		this.dir = dir;
 		this.xpos = xpos;
 		this.ypos = ypos;
