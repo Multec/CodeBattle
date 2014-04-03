@@ -1,5 +1,7 @@
 package codeBattle;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -7,7 +9,7 @@ import codeBattle.tankCode.SmallTank1;
 import codeBattle.tankCode.SmallTank2;
 
 public class Main extends PApplet {
-
+	
 	// *********************************************************************************************
 	// Attributes:
 	// ---------------------------------------------------------------------------------------------
@@ -24,9 +26,12 @@ public class Main extends PApplet {
 	private PImage bgImg;
 	private PImage iconImg;
 	
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private ArrayList<Tank> tanks = new ArrayList<Tank>();
+	
 	public int screenWidth = 1024;
 	public int screenHeight = 768;
-
+	
 	private int framesEllapsed = 0;
 	private int min = 0;
 	private int sec = 0;
@@ -46,15 +51,17 @@ public class Main extends PApplet {
 		bgImg.resize(screenWidth, screenHeight);
 		iconImg = this.loadImage("tanklogo.png");
 		
-		kremlin_32 = loadFont("/Kremlin-32.vlw");
-		kremlin_16 = loadFont("/Kremlin-16.vlw");
+		kremlin_32 = loadFont("Kremlin-32.vlw");
+		kremlin_16 = loadFont("Kremlin-16.vlw");
 		
 		// initialize the tanks:
 		tank1 = new SmallTank1(this, "tank1");
-		tank1.init(50, 50, 0);
+		tank1.init(100, 100, 0);
+		tanks.add(tank1);
 		
 		tank2 = new SmallTank2(this, "tank2");
-		tank2.init(width - 50, height - 50, PI);
+		tank2.init(width - 100, height - 100, PI);
+		tanks.add(tank2);
 		
 		tankMove1 = new TankMove(tank1, tank2);
 		tankMove2 = new TankMove(tank2, tank1);
@@ -77,36 +84,43 @@ public class Main extends PApplet {
 			// update the tanks:
 			tank1.move(tankMove1);
 			tank2.move(tankMove2);
-			tankMove1.applyMove();
-			tankMove2.applyMove();
+			applyMove(tankMove1);
+			applyMove(tankMove2);
 			
 			framesEllapsed++;
 			
-			if (tank1.shot) {
-				if (tank1.getB().xpos > tank2.getXPos() - 32
-						&& tank1.getB().xpos < tank2.getXPos() + 32
-						&& tank1.getB().ypos > tank2.getYPos() - 25
-						&& tank1.getB().ypos < tank2.getYPos() + 25)
-				{
-					tank2.decreaseHealth();
-					System.out.println("hit tank2");
-					tank1.getB().die();
-					tank1.shot = false;
-				}
-			}
-			if (tank2.shot) {
-				if (tank2.getB().xpos > tank1.getXPos() - 32
-						&& tank2.getB().xpos < tank1.getXPos() + 32
-						&& tank2.getB().ypos > tank1.getYPos()
-						&& tank2.getB().ypos < tank1.getYPos() + 35)
-				{
-					tank2.decreaseHealth();
-					System.out.println("hit tank2");
-					tank1.getB().die();
-					tank1.shot = false;
-				}
-			}
+			updateBullets();
 			
+//			if (tank1.shot) {
+//				if (tank1.getB().xpos > tank2.getXPos() - 32
+//						&& tank1.getB().xpos < tank2.getXPos() + 32
+//						&& tank1.getB().ypos > tank2.getYPos() - 25
+//						&& tank1.getB().ypos < tank2.getYPos() + 25)
+//				{
+//					tank2.decreaseHealth();
+//					System.out.println("hit tank2");
+//					tank1.getB().die();
+//					tank1.shot = false;
+//				}
+//			}
+			// if (tank2.shot) {
+			// if (tank2.getB().xpos > tank1.getXPos() - 32
+			// && tank2.getB().xpos < tank1.getXPos() + 32
+			// && tank2.getB().ypos > tank1.getYPos()
+			// && tank2.getB().ypos < tank1.getYPos() + 35)
+			// {
+			// tank2.decreaseHealth();
+			// System.out.println("hit tank2");
+			// tank1.getB().die();
+			// tank1.shot = false;
+			// }
+			// }
+			
+			tank1.draw();
+			tank2.draw();
+			for (Bullet bullet : bullets) {
+				bullet.draw();
+			}
 		}
 		else {
 			
@@ -125,21 +139,66 @@ public class Main extends PApplet {
 				textAlign(CENTER);
 				text("tank 2 won", 512, 520);
 			}
-			
-			tank1.draw();
-			tank2.draw();
 		}
 		
 		textFont(kremlin_16);
 		fill(32, 32, 32);
 		noStroke();
-		rect(10, 10, (float) (tank1.getHealth() * 4.6), 20);
-		rect((float) ((width - 10) - tank2.getHealth() * 4.6), 10,
-				(float) (tank2.getHealth() * 4.6), 20);
+		rect(10, 10, tank1.getHealth() * 4.6f, 20);
+		rect((width - 10) - tank2.getHealth() * 4.6f, 10, tank2.getHealth() * 4.6f, 20);
 		textSize(20);
 		text(min + ":", 490, 28);
 		text(sec, 520, 28);
-		
+	}
+	
+	private void applyMove(TankMove move) {
+		move.applyMove();
+		if (move.fireBullet()) {
+			Tank tank = move.getThisTank();
+			Bullet bullet = new Bullet(tank.getXPos(), tank.getYPos(), tank.getAngle(), this);
+			bullets.add(bullet);
+			tank.firedShot();
+		}
+	}
+	
+	private void updateBullets() {
+		int i = 0;
+		while (i < bullets.size()) {
+			Bullet bullet = bullets.get(i);
+			println(bullet);
+			bullet.update();
+			if (bullet.getXpos() < 0 || bullet.getXpos() > width || 
+					bullet.getYpos() < 0 || bullet.getYpos() > height) {
+				// the bullet is outside the screen: remove
+				bullets.remove(i);
+				continue;
+			}
+			
+			boolean hit = false;
+			for (Tank tank : tanks) {	
+				if (dist(bullet.getXpos(), bullet.getYpos(), tank.getXPos(), tank.getYPos()) < 30) {
+					// the bullet hit the tank:
+					tank.decreaseHealth();
+					println("- Tank " + tank.getName() + " was hit");
+					hit = true;
+				}
+			}
+			if (hit) {
+				bullets.remove(i);
+				continue;
+			}
+//			if (tank1.getB().xpos > tank2.getXPos() - 32
+//					&& tank1.getB().xpos < tank2.getXPos() + 32
+//					&& tank1.getB().ypos > tank2.getYPos() - 25
+//					&& tank1.getB().ypos < tank2.getYPos() + 25)
+//			{
+//				tank2.decreaseHealth();
+//				System.out.println("hit tank2");
+//				tank1.getB().die();
+//				tank1.shot = false;
+//			}
+			bullet.draw();
+		}
 	}
 	
 	public boolean sketchFullScreen() {

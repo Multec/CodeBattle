@@ -26,19 +26,22 @@ public class Tank implements PConstants {
 	
 	private float speed;
 	
-	private float angle;
+	private float angle = 0;
+	private float angleInc = PI / 50;
+
+	private int health = 0;
+	private int healthDec = 10;
 	
-	private float angleInc = PI / 20;
+	private boolean alive = false;
+	
+	private int chargeLevel = 0;
+	private int charged = 30;
 	
 	// ---------------------------------------------------------------------------------------------
 	
-	protected boolean shot = false;
-	protected int health = 100;
-	public int wait = 0;
-	private boolean alive;
 	private Bullet b;
 	
-	private TankImg t;
+	private TankImg tankImg;
 	
 	// *********************************************************************************************
 	// Constructors:
@@ -46,49 +49,50 @@ public class Tank implements PConstants {
 	
 	public Tank(PApplet app, String name) {
 		this.app = app;
-		alive = true;
-		xpos = app.random(980);
-		ypos = app.random(700);
 		this.name = name;
-		t = new TankImg(this.app);
-		
-		speed = 1;
+		tankImg = new TankImg(this.app);
 	}
 	
 	void init(float xpos, float ypos, float angle) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.angle = angle;
+		alive = true;
+		speed = 0;
+		health = 100;
+		chargeLevel = 0;
 	}
 	
 	// *********************************************************************************************
 	// Accessors:
 	// ---------------------------------------------------------------------------------------------
+
+	final public String getName() {
+		return name;
+	}
 	
-	public float getSpeed() {
+	final public float getXPos() {
+		return xpos;
+	}
+	
+	final public float getYPos() {
+		return ypos;
+	}
+	
+	final public float getSpeed() {
 		return speed;
 	}
-	
-	public void increaseSpeed() {
-		speed++;
+
+	final public float getAngle() {
+		return angle;
 	}
 	
-	public void decreaseSpeed() {
-		speed--;
+	final public int getHealth() {
+		return this.health;
 	}
 	
-	/**
-	 * Call this method to rotate the tank to the left.
-	 */
-	public void rotateLeft() {
-		angle -= angleInc;
-	}
-	
-	/**
-	 * Call this method to rotate the tank to the right.
-	 */
-	public void rotateRight() {
-		angle += angleInc;
+	final public boolean canShoot() {
+		return chargeLevel == charged;
 	}
 	
 	// *********************************************************************************************
@@ -100,51 +104,60 @@ public class Tank implements PConstants {
 	}
 
 	// *********************************************************************************************
+	// Modifiers:
+	// ---------------------------------------------------------------------------------------------
+	
+	final void increaseSpeed() {
+		speed++;
+	}
+	
+	final void decreaseSpeed() {
+		speed--;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the left.
+	 */
+	final void rotateLeft() {
+		angle -= angleInc;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the right.
+	 */
+	final void rotateRight() {
+		angle += angleInc;
+	}
+
+	final void decreaseHealth(){
+		this.health -= healthDec;
+	}
+	
+	// *********************************************************************************************
 	// Methods:
 	// ---------------------------------------------------------------------------------------------
 	
-	public void draw() {
+	final void update() {
 		if (alive) {
-			if (health < 0) {
+			if (health <= 0) {
 				alive = false;
 			}
-			if (wait == 0) {
-				if (this.speed < 3) {
-					speed = 3;
-				}
-				this.xpos = calculateXpos();
-				this.ypos = calculateYpos();
-			}
-			else {
-				wait--;
-			}
-			if (shot) {
-				b.draw();
-				if (b.xpos < 0 || b.ypos < 0 || b.xpos > 1024 || b.ypos > 768) {
-					shot = false;
-					b.die();
-				}
-			}
+			this.xpos = calculateXpos();
+			this.ypos = calculateYpos();
 			
-			t.draw(angle, 0, xpos, ypos, name);
-		}
-		
-	}
-	
-	public void shoot() {
-		if (shot) {
-			
-		}
-		else {
-			shot = true;
-			b = new Bullet((int) (xpos), (int) (ypos), angle, app);			
+			if (chargeLevel < charged) chargeLevel++;
 		}
 	}
 	
-//	public void setRotation(float rot) {
-//		this.angle = (rot) * Math.PI / 180;
-//		// this.rot = rot/100;
-//	}
+	final void draw() {
+		if (alive) {
+			tankImg.draw(angle, 0, xpos, ypos, name);
+		}
+	}
+	
+	void firedShot() {
+		chargeLevel = 0;
+	}
 	
 	public void setSpeed(float speed) {
 		this.speed = speed;
@@ -180,55 +193,6 @@ public class Tank implements PConstants {
 		}
 	}
 	
-	public void setWait(int wait) {
-		this.wait = wait;
-	}
-	
-	public int getRot() {
-		return (int) (Math.round(angle));
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	// public float getOtherTankX(){
-	// return otherTankX;
-	// }
-	// public float getOtherTankY(){
-	// return otherTankY;
-	// }
-	// public void setOtherX(float otherX){
-	// this.otherTankX = otherX;
-	// }
-	// public void setOtherY(float otherY){
-	// this.otherTankY = otherY;
-	// }
-	
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-	
-	public int getHealth() {
-		return this.health;
-	}
-	
-	public void decreaseHealth(){
-		this.health-=11;
-	}
-	
-	public float getXPos() {
-		return xpos;
-	}
-	
-	public float getYPos() {
-		return ypos;
-	}
-	
-	public boolean getShot() {
-		return this.shot;
-	}
-	
 	public Bullet getB() {
 		return b;
 	}
@@ -236,4 +200,5 @@ public class Tank implements PConstants {
 	public boolean isAlive() {
 		return alive;
 	}
+	
 }

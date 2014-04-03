@@ -1,11 +1,8 @@
-/**
- * 
- */
 package codeBattle;
 
 /**
  * @author Wouter Van den Broeck
- * 
+ * @author Jan Everaert
  */
 public class TankMove {
 	
@@ -31,10 +28,6 @@ public class TankMove {
 	}
 	
 	// *********************************************************************************************
-	// Accessors:
-	// ---------------------------------------------------------------------------------------------
-	
-	// *********************************************************************************************
 	// Methods to get information from this tank.
 	// ---------------------------------------------------------------------------------------------
 	
@@ -42,8 +35,8 @@ public class TankMove {
 		return thisTank.getSpeed();
 	}
 	
-	public float getThisRotation() {
-		return thisTank.getRot();
+	public float getThisAngle() {
+		return thisTank.getAngle();
 	}
 	
 	public float getThisXPos() {
@@ -58,10 +51,6 @@ public class TankMove {
 	// Methods to get information from this tank.
 	// ---------------------------------------------------------------------------------------------
 	
-	// public float getOtherSpeed() { return otherTank.getSpeed(); }
-	
-	// public float getOtherRotation() { return otherTank.getRot(); }
-	
 	public float getOtherXPos() {
 		return otherTank.getXPos();
 	}
@@ -69,6 +58,10 @@ public class TankMove {
 	public float getOtherYPos() {
 		return otherTank.getYPos();
 	}
+
+	// public float getOtherSpeed() { return otherTank.getSpeed(); }
+	
+	// public float getOtherAngle() { return otherTank.getAngle(); }
 	
 	// *********************************************************************************************
 	// Methods for manipulating this tank.
@@ -123,7 +116,6 @@ public class TankMove {
 		else if (rotateRight) thisTank.rotateRight();
 		if (increaseSpeed) thisTank.increaseSpeed();
 		else if (decreaseSpeed) thisTank.decreaseSpeed();
-		if (shoot) thisTank.shoot();
 		
 		// reset move:
 		rotateLeft = false;
@@ -131,6 +123,17 @@ public class TankMove {
 		increaseSpeed = false;
 		decreaseSpeed = false;
 		shoot = false;
+	}
+	
+	/**
+	 * @return True when the tanks wants to fire a shot and can fire a shot.
+	 */
+	boolean fireBullet() {
+		return shoot && thisTank.canShoot();
+	}
+	
+	Tank getThisTank() {
+		return thisTank;
 	}
 	
 }
