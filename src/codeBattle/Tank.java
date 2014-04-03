@@ -1,162 +1,239 @@
-/**
- * 
- */
 package codeBattle;
-import processing.core.*;
+
+import processing.core.PApplet;
+import processing.core.PConstants;
 
 /**
- 
- * @author janeveraert
- *
+ * @author Jan Everaert
+ * @author Wouter Van den Broeck
+ * 
  */
-public class Tank {
-	PApplet app;
-	public float speed;
-	public double rot;
-	protected boolean shot = false;
-	private int health = 100;
+public class Tank implements PConstants {
+	
+	// *********************************************************************************************
+	// Attributes:
+	// ---------------------------------------------------------------------------------------------
+	
+	protected PApplet app;
+	
+	// ---------------------------------------------------------------------------------------------
+	// private:
+
+	private String name;
+	
 	private float xpos;
 	private float ypos;
+	
+	private float speed;
+	
+	private float angle;
+	
+	private float angleInc = PI / 20;
+	
+	// ---------------------------------------------------------------------------------------------
+	
+	protected boolean shot = false;
+	protected int health = 100;
 	public int wait = 0;
 	private boolean alive;
 	private Bullet b;
-	private String name;
 	
-	private float otherTankX;
-	private float otherTankY;
+	private TankImg t;
 	
-	TankImg t;
+	// *********************************************************************************************
+	// Constructors:
+	// ---------------------------------------------------------------------------------------------
 	
 	public Tank(PApplet app, String name) {
 		this.app = app;
 		alive = true;
-		xpos = (float) (Math.random()*980);
-		ypos = (float) (Math.random()*700);
+		xpos = app.random(980);
+		ypos = app.random(700);
 		this.name = name;
 		t = new TankImg(this.app);
+		
 		speed = 1;
-		
 	}
-	public void draw(){
-		
+	
+	void init(float xpos, float ypos, float angle) {
+		this.xpos = xpos;
+		this.ypos = ypos;
+		this.angle = angle;
 	}
-	public void run(){
-		if(alive){
-			if(health<0){
+	
+	// *********************************************************************************************
+	// Accessors:
+	// ---------------------------------------------------------------------------------------------
+	
+	public float getSpeed() {
+		return speed;
+	}
+	
+	public void increaseSpeed() {
+		speed++;
+	}
+	
+	public void decreaseSpeed() {
+		speed--;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the left.
+	 */
+	public void rotateLeft() {
+		angle -= angleInc;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the right.
+	 */
+	public void rotateRight() {
+		angle += angleInc;
+	}
+	
+	// *********************************************************************************************
+	// Methods to implement in concrete Tank class:
+	// ---------------------------------------------------------------------------------------------
+	
+	protected void move(TankMove move) {
+		// implement in concrete Tank class
+	}
+
+	// *********************************************************************************************
+	// Methods:
+	// ---------------------------------------------------------------------------------------------
+	
+	public void draw() {
+		if (alive) {
+			if (health < 0) {
 				alive = false;
 			}
-			if(wait == 0){
-				if(this.speed <3){
+			if (wait == 0) {
+				if (this.speed < 3) {
 					speed = 3;
 				}
 				this.xpos = calculateXpos();
 				this.ypos = calculateYpos();
-			} else {
+			}
+			else {
 				wait--;
 			}
-			if(shot){
+			if (shot) {
 				b.draw();
-				if(b.xpos <0 || b.ypos<0 || b.xpos >1024 || b.ypos>768){
+				if (b.xpos < 0 || b.ypos < 0 || b.xpos > 1024 || b.ypos > 768) {
 					shot = false;
 					b.die();
 				}
 			}
-			t.draw(rot, 0, xpos, ypos, name);
+			
+			t.draw(angle, 0, xpos, ypos, name);
 		}
 		
-	}
-	public void shoot(){
-		if(shot){
-			
-		} else {
-			shot = true;
-			b = new Bullet((int)(xpos), (int)(ypos), rot, app);
-			
-		}
-		
-	}
-	public void setRotation(float rot){
-		this.rot = (rot) * Math.PI / 180;
-		//this.rot = rot/100;
 	}
 	
-	public void setSpeed(float speed){
+	public void shoot() {
+		if (shot) {
+			
+		}
+		else {
+			shot = true;
+			b = new Bullet((int) (xpos), (int) (ypos), angle, app);			
+		}
+	}
+	
+//	public void setRotation(float rot) {
+//		this.angle = (rot) * Math.PI / 180;
+//		// this.rot = rot/100;
+//	}
+	
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
-	private float calculateXpos(){
-		float x = (Math.round(Math.cos(rot) * speed + xpos));
-		if(x>999){
+	
+	private float calculateXpos() {
+		float x = (Math.round(Math.cos(angle) * speed + xpos));
+		if (x > 980) {
 			this.speed = 0;
-			return 999;
-		} else if(x<32){
+			return 980;
+		}
+		else if (x < 0) {
 			this.speed = 0;
-			return 32;
-		} else  if(x-otherTankX<25 && x-otherTankX>-25){
-			this.speed = 0;
-			return x;
-		} else {
+			return 0;
+		}
+		else {
 			return x;
 		}
 	}
-	private float calculateYpos(){
-		float y = (Math.round(Math.sin(rot) * speed + ypos));
-		if(y>736){
+	
+	private float calculateYpos() {
+		float y = (Math.round(Math.sin(angle) * speed + ypos));
+		if (y > 768) {
 			this.speed = 0;
-			return 736;
-		} else if(y<25){
+			return 768;
+		}
+		else if (y < 0) {
 			this.speed = 0;
-			return 25;
-		} else if(y-otherTankY<25 && y-otherTankY>-25){
-			this.speed = 0;
-			return y;
-		} else {
+			return 0;
+		}
+		else {
 			return y;
 		}
 	}
-	public void setWait(int wait){
+	
+	public void setWait(int wait) {
 		this.wait = wait;
 	}
-	public int getRot(){
-		return (int)(Math.round(rot));
+	
+	public int getRot() {
+		return (int) (Math.round(angle));
 	}
-	public String getName(){
+	
+	public String getName() {
 		return name;
 	}
-	public float getOtherTankX(){
-		return otherTankX;
-	}
-	public float getOtherTankY(){
-		return otherTankY;
-	}
-	public void setOtherX(float otherX){
-		this.otherTankX = otherX;
-	}
-	public void setOtherY(float otherY){
-		this.otherTankY = otherY;
-	}
-	public void setSpeed(int speed){
+	
+	// public float getOtherTankX(){
+	// return otherTankX;
+	// }
+	// public float getOtherTankY(){
+	// return otherTankY;
+	// }
+	// public void setOtherX(float otherX){
+	// this.otherTankX = otherX;
+	// }
+	// public void setOtherY(float otherY){
+	// this.otherTankY = otherY;
+	// }
+	
+	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
-	public int getHealth(){
+	
+	public int getHealth() {
 		return this.health;
 	}
+	
 	public void decreaseHealth(){
 		this.health-=11;
 	}
-	public float getXpos() {
+	
+	public float getXPos() {
 		return xpos;
 	}
 	
-	public float getYpos() {
+	public float getYPos() {
 		return ypos;
 	}
-	public boolean getShot(){
+	
+	public boolean getShot() {
 		return this.shot;
 	}
-	public Bullet getB(){
+	
+	public Bullet getB() {
 		return b;
 	}
-	public boolean getAlive(){
+	
+	public boolean isAlive() {
 		return alive;
 	}
 }

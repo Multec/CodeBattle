@@ -2,33 +2,28 @@ package codeBattle.tankCode;
 
 import processing.core.PApplet;
 import codeBattle.Tank;
+import codeBattle.TankMove;
 
-public class SmallTank1 extends Tank{
+public class SmallTank1 extends Tank {
 	
-	private int rot;
+	private float t = 0;
+	
 	public SmallTank1(PApplet app, String name) {
 		super(app, name);
 		// TODO Auto-generated constructor stub
 	}
-
-	public void run(){
-		super.setRotation(rot);
-		super.speed = 2;
-		super.shoot();
-		super.run();
-		rot++;
+	
+	protected void move(TankMove move) {
+		t += .01;
+		if (app.noise(t) < .5) {
+			move.rotateLeft();
+		}
+		else {
+			move.rotateRight();
+		}
+		if (move.getThisSpeed() < 4) {
+			move.increaseSpeed();
+		}
+		move.shoot();
 	}
 }
-
-/*
- * available functions
- * 
- * super.run();
- * super.shoot();
- * super.setSpeed(int speed);
- * super.getHealth();
- * super.setRotation(float rot);
- * super.getOtherTankX();
- * super.getOtherTankY();
- * super.getOtherHealth();
- */
