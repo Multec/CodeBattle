@@ -17,9 +17,6 @@ public class Main extends PApplet {
 	private Tank tank1;
 	private Tank tank2;
 	
-	// private TankRunner T1;
-	// private TankRunner T2;
-	
 	private TankMove tankMove1;
 	private TankMove tankMove2;
 	
@@ -36,8 +33,8 @@ public class Main extends PApplet {
 	private int min = 0;
 	private int sec = 0;
 	
-	PFont kremlin_32 = null;
-	PFont kremlin_16 = null;
+	private PFont kremlin_32 = null;
+	private PFont kremlin_16 = null;
 	
 	// *********************************************************************************************
 	// Methods:
@@ -93,31 +90,6 @@ public class Main extends PApplet {
 			tank2.update(width, height);
 			updateBullets();
 			
-//			if (tank1.shot) {
-//				if (tank1.getB().xpos > tank2.getXPos() - 32
-//						&& tank1.getB().xpos < tank2.getXPos() + 32
-//						&& tank1.getB().ypos > tank2.getYPos() - 25
-//						&& tank1.getB().ypos < tank2.getYPos() + 25)
-//				{
-//					tank2.decreaseHealth();
-//					System.out.println("hit tank2");
-//					tank1.getB().die();
-//					tank1.shot = false;
-//				}
-//			}
-			// if (tank2.shot) {
-			// if (tank2.getB().xpos > tank1.getXPos() - 32
-			// && tank2.getB().xpos < tank1.getXPos() + 32
-			// && tank2.getB().ypos > tank1.getYPos()
-			// && tank2.getB().ypos < tank1.getYPos() + 35)
-			// {
-			// tank2.decreaseHealth();
-			// System.out.println("hit tank2");
-			// tank1.getB().die();
-			// tank1.shot = false;
-			// }
-			// }
-			
 			tank1.draw();
 			tank2.draw();
 			for (Bullet bullet : bullets) {
@@ -125,7 +97,6 @@ public class Main extends PApplet {
 			}
 		}
 		else {
-			
 			textFont(kremlin_32);
 			imageMode(CENTER);
 			image(iconImg, width / 2, height / 2);
@@ -157,7 +128,7 @@ public class Main extends PApplet {
 		move.apply();
 		if (move.fireBullet()) {
 			Tank tank = move.getThisTank();
-			Bullet bullet = new Bullet(tank.getXPos(), tank.getYPos(), tank.getAngle(), this);
+			Bullet bullet = new Bullet(tank, this);
 			bullets.add(bullet);
 			tank.firedShot();
 		}
@@ -170,15 +141,14 @@ public class Main extends PApplet {
 			Bullet bullet = bullets.get(i);
 			println(bullet);
 			bullet.update();
-			if (bullet.getXpos() < 0 || bullet.getXpos() > width || 
-					bullet.getYpos() < 0 || bullet.getYpos() > height) {
+			if (outsideScreen(bullet.getXpos(), bullet.getYpos())) {
 				// the bullet is outside the screen: remove
 				bullets.remove(i);
 				continue;
 			}
 			
 			boolean hit = false;
-			for (Tank tank : tanks) {	
+			for (Tank tank : tanks) {
 				if (dist(bullet.getXpos(), bullet.getYpos(), tank.getXPos(), tank.getYPos()) < 30) {
 					// the bullet hit the tank:
 					tank.decreaseHealth();
@@ -190,21 +160,16 @@ public class Main extends PApplet {
 				bullets.remove(i);
 				continue;
 			}
-//			if (tank1.getB().xpos > tank2.getXPos() - 32
-//					&& tank1.getB().xpos < tank2.getXPos() + 32
-//					&& tank1.getB().ypos > tank2.getYPos() - 25
-//					&& tank1.getB().ypos < tank2.getYPos() + 25)
-//			{
-//				tank2.decreaseHealth();
-//				System.out.println("hit tank2");
-//				tank1.getB().die();
-//				tank1.shot = false;
-//			}
 			bullet.draw();
+			i++;
 		}
 	}
 	
 	public boolean sketchFullScreen() {
 		return true;
+	}
+	
+	private boolean outsideScreen(float x, float y) {
+		return x < 0 || x > width || y < 0 || y > height;
 	}
 }

@@ -117,7 +117,7 @@ public class TankMove {
 		if (increaseSpeed) thisTank.increaseSpeed();
 		else if (decreaseSpeed) thisTank.decreaseSpeed();
 	}
-
+	
 	void reset() {
 		rotateLeft = false;
 		rotateRight = false;

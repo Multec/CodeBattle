@@ -28,7 +28,7 @@ public class Tank implements PConstants {
 	private float speed;
 	
 	private float angle = 0;
-	private float angleInc = PI / 50;
+	private float angleInc = PI / 100;
 	
 	private int health = 0;
 	private int healthDec = 10;
@@ -36,7 +36,7 @@ public class Tank implements PConstants {
 	private boolean alive = false;
 	
 	private int chargeLevel = 0;
-	private int charged = 30;
+	private int charged = 3;
 	
 	// ---------------------------------------------------------------------------------------------
 	
@@ -179,7 +179,7 @@ public class Tank implements PConstants {
 			app.image(img, -25, -39);
 			app.noFill();
 			app.stroke(255, 204, 0);
-			//app.ellipse(0, 0, 32, 32);
+			// app.ellipse(0, 0, 32, 32);
 			app.popMatrix();
 		}
 	}
