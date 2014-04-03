@@ -55,12 +55,12 @@ public class Main extends PApplet {
 		kremlin_16 = loadFont("Kremlin-16.vlw");
 		
 		// initialize the tanks:
-		tank1 = new SmallTank1(this, "tank1");
-		tank1.init(100, 100, 0);
+		tank1 = new SmallTank1(this, "Kim");
+		tank1.init(100, 100, 0, loadImage("tank_korea.png"));
 		tanks.add(tank1);
 		
-		tank2 = new SmallTank2(this, "tank2");
-		tank2.init(width - 100, height - 100, PI);
+		tank2 = new SmallTank2(this, "Barack");
+		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"));
 		tanks.add(tank2);
 		
 		tankMove1 = new TankMove(tank1, tank2);
@@ -81,14 +81,16 @@ public class Main extends PApplet {
 		
 		if (tank1.isAlive() && tank2.isAlive()) {
 			
+			framesEllapsed++;
+			
 			// update the tanks:
 			tank1.move(tankMove1);
 			tank2.move(tankMove2);
 			applyMove(tankMove1);
 			applyMove(tankMove2);
 			
-			framesEllapsed++;
-			
+			tank1.update(width, height);
+			tank2.update(width, height);
 			updateBullets();
 			
 //			if (tank1.shot) {
@@ -152,13 +154,14 @@ public class Main extends PApplet {
 	}
 	
 	private void applyMove(TankMove move) {
-		move.applyMove();
+		move.apply();
 		if (move.fireBullet()) {
 			Tank tank = move.getThisTank();
 			Bullet bullet = new Bullet(tank.getXPos(), tank.getYPos(), tank.getAngle(), this);
 			bullets.add(bullet);
 			tank.firedShot();
 		}
+		move.reset();
 	}
 	
 	private void updateBullets() {

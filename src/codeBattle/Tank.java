@@ -2,6 +2,7 @@ package codeBattle;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PImage;
 
 /**
  * @author Jan Everaert
@@ -18,7 +19,7 @@ public class Tank implements PConstants {
 	
 	// ---------------------------------------------------------------------------------------------
 	// private:
-
+	
 	private String name;
 	
 	private float xpos;
@@ -28,7 +29,7 @@ public class Tank implements PConstants {
 	
 	private float angle = 0;
 	private float angleInc = PI / 50;
-
+	
 	private int health = 0;
 	private int healthDec = 10;
 	
@@ -41,7 +42,7 @@ public class Tank implements PConstants {
 	
 	private Bullet b;
 	
-	private TankImg tankImg;
+	private PImage img;
 	
 	// *********************************************************************************************
 	// Constructors:
@@ -50,13 +51,13 @@ public class Tank implements PConstants {
 	public Tank(PApplet app, String name) {
 		this.app = app;
 		this.name = name;
-		tankImg = new TankImg(this.app);
 	}
 	
-	void init(float xpos, float ypos, float angle) {
+	void init(float xpos, float ypos, float angle, PImage img) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.angle = angle;
+		this.img = img;
 		alive = true;
 		speed = 0;
 		health = 100;
@@ -66,7 +67,7 @@ public class Tank implements PConstants {
 	// *********************************************************************************************
 	// Accessors:
 	// ---------------------------------------------------------------------------------------------
-
+	
 	final public String getName() {
 		return name;
 	}
@@ -82,7 +83,7 @@ public class Tank implements PConstants {
 	final public float getSpeed() {
 		return speed;
 	}
-
+	
 	final public float getAngle() {
 		return angle;
 	}
@@ -91,7 +92,7 @@ public class Tank implements PConstants {
 		return this.health;
 	}
 	
-	final public boolean canShoot() {
+	final public boolean canFire() {
 		return chargeLevel == charged;
 	}
 	
@@ -102,7 +103,7 @@ public class Tank implements PConstants {
 	protected void move(TankMove move) {
 		// implement in concrete Tank class
 	}
-
+	
 	// *********************************************************************************************
 	// Modifiers:
 	// ---------------------------------------------------------------------------------------------
@@ -128,8 +129,8 @@ public class Tank implements PConstants {
 	final void rotateRight() {
 		angle += angleInc;
 	}
-
-	final void decreaseHealth(){
+	
+	final void decreaseHealth() {
 		this.health -= healthDec;
 	}
 	
@@ -137,21 +138,49 @@ public class Tank implements PConstants {
 	// Methods:
 	// ---------------------------------------------------------------------------------------------
 	
-	final void update() {
+	final void update(int width, int height) {
 		if (alive) {
 			if (health <= 0) {
 				alive = false;
 			}
-			this.xpos = calculateXpos();
-			this.ypos = calculateYpos();
 			
-			if (chargeLevel < charged) chargeLevel++;
+			// this.xpos = calculateXpos();
+			xpos += app.cos(angle) * speed;
+			if (xpos < 32) {
+				xpos = 32;
+				speed = 0;
+			}
+			else if (xpos > width - 32) {
+				xpos = width - 32;
+				speed = 0;
+			}
+			
+			ypos += app.sin(angle) * speed;
+			if (ypos < 32) {
+				ypos = 32;
+				speed = 0;
+			}
+			else if (ypos > height - 32) {
+				ypos = height - 32;
+				speed = 0;
+			}
+			
+			if (chargeLevel < charged) {
+				chargeLevel++;
+			}
 		}
 	}
 	
 	final void draw() {
 		if (alive) {
-			tankImg.draw(angle, 0, xpos, ypos, name);
+			app.pushMatrix();
+			app.translate(xpos, ypos);
+			app.rotate(angle + HALF_PI);
+			app.image(img, -25, -39);
+			app.noFill();
+			app.stroke(255, 204, 0);
+			//app.ellipse(0, 0, 32, 32);
+			app.popMatrix();
 		}
 	}
 	
@@ -161,40 +190,6 @@ public class Tank implements PConstants {
 	
 	public void setSpeed(float speed) {
 		this.speed = speed;
-	}
-	
-	private float calculateXpos() {
-		float x = (Math.round(Math.cos(angle) * speed + xpos));
-		if (x > 980) {
-			this.speed = 0;
-			return 980;
-		}
-		else if (x < 0) {
-			this.speed = 0;
-			return 0;
-		}
-		else {
-			return x;
-		}
-	}
-	
-	private float calculateYpos() {
-		float y = (Math.round(Math.sin(angle) * speed + ypos));
-		if (y > 768) {
-			this.speed = 0;
-			return 768;
-		}
-		else if (y < 0) {
-			this.speed = 0;
-			return 0;
-		}
-		else {
-			return y;
-		}
-	}
-	
-	public Bullet getB() {
-		return b;
 	}
 	
 	public boolean isAlive() {

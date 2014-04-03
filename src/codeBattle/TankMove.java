@@ -14,7 +14,7 @@ public class TankMove {
 	private boolean rotateRight = false;
 	private boolean increaseSpeed = false;
 	private boolean decreaseSpeed = false;
-	private boolean shoot = false;
+	private boolean fire = false;
 	private Tank thisTank;
 	private Tank otherTank;
 	
@@ -58,7 +58,7 @@ public class TankMove {
 	public float getOtherYPos() {
 		return otherTank.getYPos();
 	}
-
+	
 	// public float getOtherSpeed() { return otherTank.getSpeed(); }
 	
 	// public float getOtherAngle() { return otherTank.getAngle(); }
@@ -101,35 +101,36 @@ public class TankMove {
 		decreaseSpeed = true;
 	}
 	
-	public void shoot() {
-		shoot = true;
+	public void fire() {
+		if (thisTank.canFire()) {
+			fire = true;
+		}
 	}
 	
 	// *********************************************************************************************
 	// Methods to be called by the system.
 	// ---------------------------------------------------------------------------------------------
 	
-	void applyMove() {
-		
-		// apply the move;
+	void apply() {
 		if (rotateLeft) thisTank.rotateLeft();
 		else if (rotateRight) thisTank.rotateRight();
 		if (increaseSpeed) thisTank.increaseSpeed();
 		else if (decreaseSpeed) thisTank.decreaseSpeed();
-		
-		// reset move:
+	}
+
+	void reset() {
 		rotateLeft = false;
 		rotateRight = false;
 		increaseSpeed = false;
 		decreaseSpeed = false;
-		shoot = false;
+		fire = false;
 	}
 	
 	/**
 	 * @return True when the tanks wants to fire a shot and can fire a shot.
 	 */
 	boolean fireBullet() {
-		return shoot && thisTank.canShoot();
+		return fire;
 	}
 	
 	Tank getThisTank() {

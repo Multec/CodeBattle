@@ -10,11 +10,10 @@ public class SmallTank2 extends Tank {
 	
 	public SmallTank2(PApplet app, String name) {
 		super(app, name);
-		// TODO Auto-generated constructor stub
 	}
 	
 	protected void move(TankMove move) {
-		t -= .01;
+		t -= .02;
 		if (app.noise(t) < .5) {
 			move.rotateLeft();
 		}
@@ -24,6 +23,8 @@ public class SmallTank2 extends Tank {
 		if (move.getThisSpeed() < 4) {
 			move.increaseSpeed();
 		}
-		move.shoot();
+		if (canFire()) {
+			move.fire();
+		}
 	}
 }
