@@ -1,29 +1,28 @@
 package codeBattle;
 
-import processing.core.PApplet;
-import processing.core.PShape;
+
+import processing.core.*;
 
 public class TankImg {
 	private PApplet app;
-	private boolean found = false;
-	PShape tank = new PShape();
+	PImage img = null;
 	
 	public TankImg(PApplet app) {
 		this.app = app;
-		try{
-			tank = app.loadShape("/tank.svg");
-			found = true;
-		} catch (NullPointerException e){
-			System.out.println("tank doesn't exist");
-		}
+		try {
+			   img = app.loadImage("/tank.png");
+
+			} catch (NullPointerException e) {
+			    e.printStackTrace();
+			   
+			}
 	}
 	public void draw(double rot, int col, float xpos, float ypos){
-		if(found){
-			app.shape(tank, xpos, ypos);
-			tank.rotate((float)rot);
-		} else {
-			app.fill(0);
-			app.rect(xpos, ypos, 35, 45);
-		}
+		app.pushMatrix();
+		app.translate(xpos+32, ypos+25);
+		app.rotate((float) rot+app.HALF_PI);
+		System.out.println(rot);
+		app.image(img, -32, -25, 51, 64);
+		app.popMatrix();
 	}
 }

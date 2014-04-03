@@ -24,9 +24,9 @@ public class RunTanks extends Thread{
 		this.rot = rot;
 	}
 	public float getPosX(){
-		return curTank.xpos;
+		return curTank.getXpos();
 	}
 	public float getPosY(){
-		return curTank.ypos;
+		return curTank.getYpos();
 	}
 }

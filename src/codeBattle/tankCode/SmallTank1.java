@@ -26,9 +26,9 @@ public class SmallTank1 extends Tank{
  * super.run();
  * super.shoot();
  * super.setSpeed(int speed);
- * super.health;
+ * super.getHealth();
  * super.setRotation(float rot);
  * super.getOtherTankX();
  * super.getOtherTankY();
- * 
+ * super.getOtherHealth();
  */

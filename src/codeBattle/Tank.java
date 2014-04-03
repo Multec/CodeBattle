@@ -13,13 +13,13 @@ public class Tank {
 	PApplet app;
 	public float speed;
 	public double rot;
-	public boolean shot = false;
-	public int health = 100;
-	public float xpos;
-	public float ypos;
+	protected boolean shot = false;
+	protected int health = 100;
+	private float xpos;
+	private float ypos;
 	public int wait = 0;
-	public boolean alive;
-	public Bullet b;
+	private boolean alive;
+	private Bullet b;
 	private String name;
 	
 	private float otherTankX;
@@ -63,7 +63,6 @@ public class Tank {
 				}
 			}
 			t.draw(rot, 0, xpos, ypos);
-			
 		}
 		
 	}
@@ -78,7 +77,7 @@ public class Tank {
 		
 	}
 	public void setRotation(float rot){
-		this.rot = rot * Math.PI / 180;
+		this.rot = (rot) * Math.PI / 180;
 		//this.rot = rot/100;
 	}
 	
@@ -132,5 +131,24 @@ public class Tank {
 	}
 	public void setSpeed(int speed){
 		this.speed = speed;
+	}
+	public int getHealth(){
+		return this.health;
+	}
+	public float getXpos() {
+		return xpos;
+	}
+	
+	public float getYpos() {
+		return ypos;
+	}
+	public boolean getShot(){
+		return this.shot;
+	}
+	public Bullet getB(){
+		return b;
+	}
+	public boolean getAlive(){
+		return alive;
 	}
 }
