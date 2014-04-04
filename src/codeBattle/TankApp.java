@@ -111,13 +111,13 @@ public class TankApp extends AppWindow {
 				fill(32, 32, 32);
 				textSize(30);
 				textAlign(CENTER);
-				text("tank 1 won", width/2, 520);
+				text("tank 1 won", width/2, height/2+200);
 			}
 			if (tank2.getHealth() > 0) {
 				fill(32, 32, 32);
 				textSize(30);
 				textAlign(CENTER);
-				text("tank 2 won", width/2, 520);
+				text("tank 2 won", width/2, height/2+200);
 			}
 		}
 		

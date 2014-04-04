@@ -235,6 +235,8 @@ public class Tank implements PConstants {
 			else if (ypos > height - 32) {
 				ypos = height - 32;
 				speed = 0;
+			} else if(Math.abs(ypos-enemy.ypos)<70 && Math.abs(xpos-enemy.xpos)<70){
+				speed = -1;
 			}
 			
 			if (chargeLevel < charged) {
