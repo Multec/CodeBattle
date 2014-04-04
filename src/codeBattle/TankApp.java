@@ -126,8 +126,8 @@ public class TankApp extends AppWindow {
 		rect(10, 10, tank1.getHealth() * 4.6f, 30);
 		rect((width - 10) - tank2.getHealth() * 4.6f, 10, tank2.getHealth() * 4.6f, 30);
 		textSize(20);
-		text(min + ":", width/2-15, 38);
-		text(sec, width/2+15, 38);
+		textAlign(CENTER);
+		text(min + ":" + sec, width/2, 28);
 	}
 	
 	private void applyMove(Tank tank) {
