@@ -26,6 +26,7 @@ public class Tank implements PConstants {
 	
 	private float speed;
 	private float speedInc = .5f;
+	private float speedMax = 5;
 	
 	private float angle = 0;
 	private float angleInc = PI / 100;
@@ -187,8 +188,8 @@ public class Tank implements PConstants {
 	}
 	
 	final void applyMove() {
-		if (move_increaseSpeed) speed += speedInc;
-		else if (move_decreaseSpeed) speed -= speedInc;
+		if (move_increaseSpeed) speed = app.min(speed + speedInc, speedMax);
+		else if (move_decreaseSpeed) speed = app.max(speed - speedInc, 0);
 		if (move_rotateLeft) angle -= angleInc;
 		else if (move_rotateRight) angle += angleInc;
 	}
