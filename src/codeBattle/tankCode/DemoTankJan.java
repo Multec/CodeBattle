@@ -93,7 +93,7 @@ public class DemoTankJan extends Tank {
 			
 		}
 		//setRotation(angleToShoot);
-		if (getSpeed() < 4) {
+		if (getSpeed() < 5) {
 			increaseSpeed();
 		}
 		if (canFire()) {

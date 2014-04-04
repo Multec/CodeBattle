@@ -188,6 +188,11 @@ public class Tank implements PConstants {
 	}
 	
 	final void applyMove() {
+		if(speed>5){
+			speed = 5;
+		} else if(speed <-5){
+			speed = -5;
+		}
 		if (move_increaseSpeed) speed = app.min(speed + speedInc, speedMax);
 		else if (move_decreaseSpeed) speed = app.max(speed - speedInc, 0);
 		if (move_rotateLeft) angle -= angleInc;

@@ -3,12 +3,9 @@ package codeBattle;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
-import codeBattle.tankCode.DemoTank1;
-import codeBattle.tankCode.DemoTank2;
-import codeBattle.tankCode.DemoTankJan;
+import codeBattle.tankCode.*;
 
 public class TankApp extends AppWindow {
 	
@@ -61,7 +58,7 @@ public class TankApp extends AppWindow {
 		
 		// initialize the tanks:
 		tank1 = new DemoTankJan(this, "Kim");
-		tank2 = new DemoTank2(this, "Barack");
+		tank2 = new DemoTankJan(this, "Barack");
 		
 		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
 		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"), tank1);
@@ -128,7 +125,7 @@ public class TankApp extends AppWindow {
 		rect((width - 10) - tank2.getHealth() * 4.6f, 10, tank2.getHealth() * 4.6f, 30);
 		textSize(20);
 		textAlign(CENTER);
-		text(min + ":" + sec, width/2, 28);
+		text(min + ":" + sec, width/2, 38);
 	}
 	
 	private void applyMove(Tank tank) {
