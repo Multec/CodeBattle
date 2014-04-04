@@ -454,7 +454,7 @@ public class AppWindow extends PApplet {
 	public void openFullscreen(int displayIndex, Color bgColor) {
 		GraphicsDevice display = getDisplay(displayIndex);
 		Rectangle frameBounds = display.getDefaultConfiguration().getBounds();
-		openFullscreen_sys(getDefaultDisplay(), frameBounds.width, frameBounds.height, bgColor);
+		openFullscreen_sys(display, frameBounds.width, frameBounds.height, bgColor);
 	}
 	
 	/**
@@ -478,7 +478,7 @@ public class AppWindow extends PApplet {
 	public void openFullscreen(Color bgColor) {
 		GraphicsDevice display = getDefaultDisplay();
 		Rectangle frameBounds = display.getDefaultConfiguration().getBounds();
-		openFullscreen_sys(getDefaultDisplay(), frameBounds.width, frameBounds.height, bgColor);
+		openFullscreen_sys(display, frameBounds.width, frameBounds.height, bgColor);
 	}
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

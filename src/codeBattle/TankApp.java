@@ -70,7 +70,8 @@ public class TankApp extends AppWindow {
 	}
 	
 	final public void draw() {
-		background(bgImg);
+		//background(bgImg);
+		background(0xEEEEEE);
 		
 		if (framesEllapsed >= 30) {
 			sec++;

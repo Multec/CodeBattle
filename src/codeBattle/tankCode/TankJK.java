@@ -1,33 +1,35 @@
 package codeBattle.tankCode;
 
 import processing.core.PApplet;
-import codeBattle.Main;
 import codeBattle.Tank;
+import codeBattle.TankApp;
 
 public class TankJK extends Tank {
-	
+
 	// *********************************************************************************************
 	// Constructors:
 	// ---------------------------------------------------------------------------------------------
-	
+
 	/**
-	 * @param app pass this app to the super constructor
-	 * @param name pass this name to the super constructor
+	 * @param app
+	 *            pass this app to the super constructor
+	 * @param name
+	 *            pass this name to the super constructor
 	 */
-	public TankJK(Main app, String name) {
+	public TankJK(TankApp app, String name) {
 		super(app, name);
 	}
-	
+
 	// *********************************************************************************************
 	// Attributes:
 	// ---------------------------------------------------------------------------------------------
 
 	private float t = 0;
-	
+
 	// *********************************************************************************************
 	// Methods:
 	// ---------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * Use the following methods to manipulate this tank:
 	 * <ul>
@@ -60,18 +62,17 @@ public class TankJK extends Tank {
 	protected void move() {
 		float ex = getEnemyXPos();
 		float ey = getEnemyYPos();
-		
+
 		this.increaseSpeed();
-		
+
 		PApplet app = getApp();
-		
+
 		t -= .02;
 		if (app.noise(t) < .5) {
-			for(int i = 0; i<15; i++){
+			for (int i = 0; i < 15; i++) {
 				rotateLeft();
 			}
-		}
-		else {
+		} else {
 			rotateRight();
 		}
 		if (getSpeed() < 4) {
