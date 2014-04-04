@@ -58,8 +58,8 @@ public class TankApp extends AppWindow {
 		kremlin_16 = loadFont("Kremlin-16.vlw");
 		
 		// initialize the tanks:
-		tank1 = new DemoTankJan(this, "Kim");
-		tank2 = new DemoTank1(this, "Barack");
+		tank1 = new DemoTank1(this, "Kim");
+		tank2 = new DemoTankJan(this, "Barack");
 		
 		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
 		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"), tank1);
