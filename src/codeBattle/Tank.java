@@ -1,6 +1,5 @@
 package codeBattle;
 
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PImage;
 
@@ -15,7 +14,7 @@ public class Tank implements PConstants {
 	// Attributes:
 	// ---------------------------------------------------------------------------------------------
 	
-	protected PApplet app;
+	private Main app;
 	
 	// ---------------------------------------------------------------------------------------------
 	// private:
@@ -26,6 +25,7 @@ public class Tank implements PConstants {
 	private float ypos;
 	
 	private float speed;
+	private float speedInc = .5f;
 	
 	private float angle = 0;
 	private float angleInc = PI / 100;
@@ -38,26 +38,25 @@ public class Tank implements PConstants {
 	private int chargeLevel = 0;
 	private int charged = 3;
 	
-	// ---------------------------------------------------------------------------------------------
-	
-	private Bullet b;
-	
 	private PImage img;
+	
+	private Tank enemy;
 	
 	// *********************************************************************************************
 	// Constructors:
 	// ---------------------------------------------------------------------------------------------
 	
-	public Tank(PApplet app, String name) {
+	public Tank(Main app, String name) {
 		this.app = app;
 		this.name = name;
 	}
 	
-	void init(float xpos, float ypos, float angle, PImage img) {
+	final void init(float xpos, float ypos, float angle, PImage img, Tank enemy) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.angle = angle;
 		this.img = img;
+		this.enemy = enemy;
 		alive = true;
 		speed = 0;
 		health = 100;
@@ -70,6 +69,10 @@ public class Tank implements PConstants {
 	
 	final public String getName() {
 		return name;
+	}
+	
+	final public Main getApp() {
+		return app;
 	}
 	
 	final public float getXPos() {
@@ -96,11 +99,73 @@ public class Tank implements PConstants {
 		return chargeLevel == charged;
 	}
 	
+	final public boolean isAlive() {
+		return alive;
+	}
+	
+	// ---------------------------------------------------------------------------------------------
+	
+	final public float getEnemyXPos() {
+		return enemy.xpos;
+	}
+	
+	final public float getEnemyYPos() {
+		return enemy.ypos;
+	}
+	
+	// *********************************************************************************************
+	// Modifiers for concrete Tank classes:
+	// ---------------------------------------------------------------------------------------------
+	// Call the methods
+	
+	/**
+	 * Call this method to increase the speed of the tank. In each move the speed can be increased
+	 * or decreased only once.
+	 */
+	final protected void increaseSpeed() {
+		move_increaseSpeed = true;
+		move_decreaseSpeed = false;
+	}
+	
+	/**
+	 * Call this method to decrease the speed of the tank. In each move the speed can be increased
+	 * or decreased only once.
+	 */
+	final protected void decreaseSpeed() {
+		move_increaseSpeed = false;
+		move_decreaseSpeed = true;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the left.
+	 */
+	final protected void rotateLeft() {
+		move_rotateLeft = true;
+		move_rotateRight = false;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the right.
+	 */
+	final protected void rotateRight() {
+		move_rotateLeft = false;
+		move_rotateRight = true;
+	}
+	
+	/**
+	 * Call this method to fire a bullet when bullets are available.
+	 */
+	final protected void fire() {
+		if (canFire()) {
+			move_fire = true;
+		}
+	}
+	
 	// *********************************************************************************************
 	// Methods to implement in concrete Tank class:
 	// ---------------------------------------------------------------------------------------------
 	
-	protected void move(TankMove move) {
+	protected void move() {
 		// implement in concrete Tank class
 	}
 	
@@ -108,26 +173,32 @@ public class Tank implements PConstants {
 	// Modifiers:
 	// ---------------------------------------------------------------------------------------------
 	
-	final void increaseSpeed() {
-		speed++;
-	}
-	
-	final void decreaseSpeed() {
-		speed--;
-	}
+	private boolean move_increaseSpeed = false;
+	private boolean move_decreaseSpeed = false;
+	private boolean move_rotateLeft = false;
+	private boolean move_rotateRight = false;
+	private boolean move_fire = false;
 	
 	/**
-	 * Call this method to rotate the tank to the left.
+	 * @return True when the tanks wants to fire a shot and can fire a shot.
 	 */
-	final void rotateLeft() {
-		angle -= angleInc;
+	final boolean fireBullet() {
+		return move_fire;
 	}
 	
-	/**
-	 * Call this method to rotate the tank to the right.
-	 */
-	final void rotateRight() {
-		angle += angleInc;
+	final void applyMove() {
+		if (move_increaseSpeed) speed += speedInc;
+		else if (move_decreaseSpeed) speed -= speedInc;
+		if (move_rotateLeft) angle -= angleInc;
+		else if (move_rotateRight) angle += angleInc;
+	}
+	
+	final void resetMove() {
+		move_increaseSpeed = false;
+		move_decreaseSpeed = false;
+		move_rotateLeft = false;
+		move_rotateRight = false;
+		move_fire = false;
 	}
 	
 	final void decreaseHealth() {
@@ -184,16 +255,8 @@ public class Tank implements PConstants {
 		}
 	}
 	
-	void firedShot() {
+	final void firedShot() {
 		chargeLevel = 0;
-	}
-	
-	public void setSpeed(float speed) {
-		this.speed = speed;
-	}
-	
-	public boolean isAlive() {
-		return alive;
 	}
 	
 }

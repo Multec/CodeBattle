@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
-import codeBattle.tankCode.SmallTank1;
-import codeBattle.tankCode.SmallTank2;
+import codeBattle.tankCode.DemoTank1;
+import codeBattle.tankCode.DemoTank2;
 
 public class Main extends PApplet {
 	
@@ -16,9 +16,6 @@ public class Main extends PApplet {
 	
 	private Tank tank1;
 	private Tank tank2;
-	
-	private TankMove tankMove1;
-	private TankMove tankMove2;
 	
 	private PImage bgImg;
 	private PImage iconImg;
@@ -52,16 +49,14 @@ public class Main extends PApplet {
 		kremlin_16 = loadFont("Kremlin-16.vlw");
 		
 		// initialize the tanks:
-		tank1 = new SmallTank1(this, "Kim");
-		tank1.init(100, 100, 0, loadImage("tank_korea.png"));
+		tank1 = new DemoTank1(this, "Kim");
+		tank2 = new DemoTank2(this, "Barack");
+		
+		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
+		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"), tank1);
+		
 		tanks.add(tank1);
-		
-		tank2 = new SmallTank2(this, "Barack");
-		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"));
 		tanks.add(tank2);
-		
-		tankMove1 = new TankMove(tank1, tank2);
-		tankMove2 = new TankMove(tank2, tank1);
 	}
 	
 	public void draw() {
@@ -81,10 +76,10 @@ public class Main extends PApplet {
 			framesEllapsed++;
 			
 			// update the tanks:
-			tank1.move(tankMove1);
-			tank2.move(tankMove2);
-			applyMove(tankMove1);
-			applyMove(tankMove2);
+			tank1.move();
+			tank2.move();
+			applyMove(tank1);
+			applyMove(tank2);
 			
 			tank1.update(width, height);
 			tank2.update(width, height);
@@ -124,22 +119,20 @@ public class Main extends PApplet {
 		text(sec, 520, 28);
 	}
 	
-	private void applyMove(TankMove move) {
-		move.apply();
-		if (move.fireBullet()) {
-			Tank tank = move.getThisTank();
+	private void applyMove(Tank tank) {
+		tank.applyMove();
+		if (tank.fireBullet()) {
 			Bullet bullet = new Bullet(tank, this);
 			bullets.add(bullet);
 			tank.firedShot();
 		}
-		move.reset();
+		tank.resetMove();
 	}
 	
 	private void updateBullets() {
 		int i = 0;
 		while (i < bullets.size()) {
 			Bullet bullet = bullets.get(i);
-			println(bullet);
 			bullet.update();
 			if (outsideScreen(bullet.getXpos(), bullet.getYpos())) {
 				// the bullet is outside the screen: remove
@@ -151,8 +144,8 @@ public class Main extends PApplet {
 			for (Tank tank : tanks) {
 				if (dist(bullet.getXpos(), bullet.getYpos(), tank.getXPos(), tank.getYPos()) < 30) {
 					// the bullet hit the tank:
+					// println("- Tank " + tank.getName() + " was hit");
 					tank.decreaseHealth();
-					println("- Tank " + tank.getName() + " was hit");
 					hit = true;
 				}
 			}
