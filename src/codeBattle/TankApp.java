@@ -8,6 +8,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 import codeBattle.tankCode.DemoTank1;
 import codeBattle.tankCode.DemoTank2;
+import codeBattle.tankCode.DemoTankJan;
 
 public class TankApp extends AppWindow {
 	
@@ -59,7 +60,7 @@ public class TankApp extends AppWindow {
 		kremlin_16 = loadFont("Kremlin-16.vlw");
 		
 		// initialize the tanks:
-		tank1 = new DemoTank1(this, "Kim");
+		tank1 = new DemoTankJan(this, "Kim");
 		tank2 = new DemoTank2(this, "Barack");
 		
 		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
