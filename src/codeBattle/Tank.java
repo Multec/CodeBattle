@@ -28,6 +28,8 @@ public class Tank implements PConstants {
 	private float speedInc = .5f;
 	private float speedMax = 5;
 	
+	private float turretAngle = 0;
+	
 	private float angle = 0;
 	private float angleInc = PI / 100;
 	
@@ -39,7 +41,8 @@ public class Tank implements PConstants {
 	private int chargeLevel = 0;
 	private int charged = 60;
 	
-	private PImage img;
+	private PImage base;
+	private PImage top;
 
 	private String tankNaam = "naam";
 	
@@ -54,11 +57,12 @@ public class Tank implements PConstants {
 		this.name = name;
 	}
 	
-	final void init(float xpos, float ypos, float angle, PImage img, Tank enemy) {
+	final void init(float xpos, float ypos, float angle, float turretAngle, PImage base, Tank enemy, PImage top) {
 		this.xpos = xpos;
 		this.ypos = ypos;
 		this.angle = angle;
-		this.img = img;
+		this.base = base;
+		this.top = top;
 		this.enemy = enemy;
 		alive = true;
 		speed = 0;
@@ -92,6 +96,10 @@ public class Tank implements PConstants {
 	
 	final public float getAngle() {
 		return angle;
+	}
+	
+	final public float getTurretAngle() {
+		return turretAngle;
 	}
 	
 	final public int getHealth() {
@@ -156,6 +164,22 @@ public class Tank implements PConstants {
 	}
 	
 	/**
+	 * Call this method to rotate the tank to the left.
+	 */
+	final protected void rotateTurretLeft() {
+		move_rotateTurretLeft = true;
+		move_rotateTurretRight = false;
+	}
+	
+	/**
+	 * Call this method to rotate the tank to the right.
+	 */
+	final protected void rotateTurretRight() {
+		move_rotateTurretLeft = false;
+		move_rotateTurretRight = true;
+	}
+	
+	/**
 	 * Call this method to fire a bullet when bullets are available.
 	 */
 	final protected void fire() {
@@ -183,6 +207,8 @@ public class Tank implements PConstants {
 	private boolean move_decreaseSpeed = false;
 	private boolean move_rotateLeft = false;
 	private boolean move_rotateRight = false;
+	private boolean move_rotateTurretLeft = false;
+	private boolean move_rotateTurretRight = false;
 	private boolean move_fire = false;
 	
 	/**
@@ -202,6 +228,8 @@ public class Tank implements PConstants {
 		else if (move_decreaseSpeed) speed = app.max(speed - speedInc, 0);
 		if (move_rotateLeft) angle -= angleInc;
 		else if (move_rotateRight) angle += angleInc;
+		if(move_rotateTurretLeft) turretAngle -=angleInc;
+		else if(move_rotateTurretRight) turretAngle +=angleInc;
 	}
 	
 	final void resetMove() {
@@ -209,6 +237,8 @@ public class Tank implements PConstants {
 		move_decreaseSpeed = false;
 		move_rotateLeft = false;
 		move_rotateRight = false;
+		move_rotateTurretLeft = false;
+		move_rotateTurretRight = false;
 		move_fire = false;
 	}
 	
@@ -260,7 +290,10 @@ public class Tank implements PConstants {
 			app.pushMatrix();
 			app.translate(xpos, ypos);
 			app.rotate(angle + HALF_PI);
-			app.image(img, -25, -39);
+			app.image(base, -25, -39);
+			app.rotate(-(angle + HALF_PI));
+			app.rotate(turretAngle + HALF_PI);
+			app.image(top, -25, -39);
 			app.textSize(16);
 			app.noStroke();
 			app.text(name, 0, 50);

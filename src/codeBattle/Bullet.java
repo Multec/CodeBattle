@@ -23,7 +23,7 @@ final public class Bullet {
 	// ---------------------------------------------------------------------------------------------
 	
 	public Bullet(Tank tank, PApplet app) {
-		angle = tank.getAngle();
+		angle = tank.getTurretAngle();
 		xpos = tank.getXPos() + app.cos(angle) * 35;
 		ypos = tank.getYPos() + app.sin(angle) * 35;
 		this.app = app;

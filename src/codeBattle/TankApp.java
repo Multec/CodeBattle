@@ -61,8 +61,8 @@ public class TankApp extends AppWindow {
 		tank1 = new DemoTank1(this, "Kim");
 		tank2 = new DemoTankJan(this, "Barack");
 		
-		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
-		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"), tank1);
+		tank1.init(100, 100, 0, 0,loadImage("tankBase.png"), tank2, loadImage("topCHina.png"));
+		tank2.init(width - 100, height - 100, PI, PI, loadImage("tankBase.png"), tank1, loadImage("topUsa.png"));
 		
 		tanks.add(tank1);
 		tanks.add(tank2);

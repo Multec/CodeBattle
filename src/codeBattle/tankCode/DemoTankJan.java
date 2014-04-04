@@ -26,9 +26,12 @@ public class DemoTankJan extends Tank {
 	private float t = 0;
 	private float lastPosX;
 	private float lastPosY;
+	private float lastPosXS;
+	private float lastPosYS;
 	float ox;
 	float oy;
 	private float ellapsed;
+	private boolean timeToMove = false;
 	
 	// *********************************************************************************************
 	// Methods:
@@ -67,12 +70,12 @@ public class DemoTankJan extends Tank {
 		setNaam("mcAwesome");
 		PApplet app = getApp();
 		ellapsed++;
-		if(ellapsed>30){
+		if(ellapsed>60){
 			lastPosY = getEnemyYPos();
 			lastPosX = getEnemyXPos();
-
 			ox = getEnemyXPos();
 			oy = getEnemyYPos();
+			ellapsed = 0;
 		} else {
 			float movedX = (getEnemyXPos()/ellapsed)-lastPosX;
 			float movedY = (getEnemyYPos()/ellapsed)-lastPosY;
@@ -83,13 +86,22 @@ public class DemoTankJan extends Tank {
 
 		}
 
+		if(timeToMove){
+			rotateLeft();
+			timeToMove = false;
+			if (canFire()) {
+				fire();
+			}
+		} else {
 		float angleToShoot = 90-(float) (Math.atan2(ox-getXPos(), oy-getYPos()) * 180 / Math.PI);
 		
 		System.out.println(angleToShoot  + ", " + Math.toDegrees(getAngle()));
 		if(angleToShoot>Math.toDegrees(getAngle())){
+			rotateTurretRight();
 			rotateRight();
 		} else if(angleToShoot<Math.toDegrees(getAngle())){
 			rotateLeft();
+			rotateTurretLeft();
 		} else {
 			
 		}
@@ -99,6 +111,7 @@ public class DemoTankJan extends Tank {
 		}
 		if (canFire()) {
 			fire();
+		}
 		}
 	}
 }
