@@ -14,7 +14,7 @@ public class Tank implements PConstants {
 	// Attributes:
 	// ---------------------------------------------------------------------------------------------
 	
-	private Main app;
+	private TankApp app;
 	
 	// ---------------------------------------------------------------------------------------------
 	// private:
@@ -36,7 +36,7 @@ public class Tank implements PConstants {
 	private boolean alive = false;
 	
 	private int chargeLevel = 0;
-	private int charged = 3;
+	private int charged = 60;
 	
 	private PImage img;
 	
@@ -46,7 +46,7 @@ public class Tank implements PConstants {
 	// Constructors:
 	// ---------------------------------------------------------------------------------------------
 	
-	public Tank(Main app, String name) {
+	public Tank(TankApp app, String name) {
 		this.app = app;
 		this.name = name;
 	}
@@ -71,7 +71,7 @@ public class Tank implements PConstants {
 		return name;
 	}
 	
-	final public Main getApp() {
+	final public TankApp getApp() {
 		return app;
 	}
 	

@@ -1,7 +1,7 @@
 package codeBattle.tankCode;
 
 import processing.core.PApplet;
-import codeBattle.Main;
+import codeBattle.TankApp;
 import codeBattle.Tank;
 
 public class DemoTank1 extends Tank {
@@ -14,7 +14,7 @@ public class DemoTank1 extends Tank {
 	 * @param app pass this app to the super constructor
 	 * @param name pass this name to the super constructor
 	 */
-	public DemoTank1(Main app, String name) {
+	public DemoTank1(TankApp app, String name) {
 		super(app, name);
 	}
 	
