@@ -68,7 +68,15 @@ final public class Bullet {
 		app.pushMatrix();
 		app.translate(xpos, ypos);
 		app.rotate(angle);
-		app.rect(-4, -1, 8, 2);
+		//app.rect(-4,  -1, 8, 2);
+		
+		app.fill(255, 0, 0);
+		app.rect(-4, -3, 8, -1);
+		app.fill(255, 255, 0);
+		app.rect(-4, -1, 8, -1);
+		app.fill(0, 255, 255);
+		app.rect(-4, 1, 8, -1);
+		app.fill(0);
 		app.popMatrix();
 	}
 	
