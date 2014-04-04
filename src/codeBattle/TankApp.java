@@ -110,24 +110,24 @@ public class TankApp extends AppWindow {
 				fill(32, 32, 32);
 				textSize(30);
 				textAlign(CENTER);
-				text("tank 1 won", 512, 520);
+				text("tank 1 won", width/2, 520);
 			}
 			if (tank2.getHealth() > 0) {
 				fill(32, 32, 32);
 				textSize(30);
 				textAlign(CENTER);
-				text("tank 2 won", 512, 520);
+				text("tank 2 won", width/2, 520);
 			}
 		}
 		
 		textFont(kremlin_16);
 		fill(32, 32, 32);
 		noStroke();
-		rect(10, 10, tank1.getHealth() * 4.6f, 20);
-		rect((width - 10) - tank2.getHealth() * 4.6f, 10, tank2.getHealth() * 4.6f, 20);
+		rect(10, 10, tank1.getHealth() * 4.6f, 30);
+		rect((width - 10) - tank2.getHealth() * 4.6f, 10, tank2.getHealth() * 4.6f, 30);
 		textSize(20);
-		text(min + ":", 490, 28);
-		text(sec, 520, 28);
+		text(min + ":", width/2-15, 38);
+		text(sec, width/2+15, 38);
 	}
 	
 	private void applyMove(Tank tank) {
