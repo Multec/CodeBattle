@@ -58,6 +58,7 @@ public class DemoTank1 extends Tank {
 	 * @see codeBattle.Tank#move()
 	 */
 	protected void move() {
+		setNaam("jan");
 		PApplet app = getApp();
 		
 		t += .01;

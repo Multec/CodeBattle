@@ -36,6 +36,7 @@ public class TankApp extends AppWindow {
 	private int min = 0;
 	private int sec = 0;
 	
+	
 	private PFont kremlin_32 = null;
 	private PFont kremlin_16 = null;
 	
@@ -58,7 +59,7 @@ public class TankApp extends AppWindow {
 		
 		// initialize the tanks:
 		tank1 = new DemoTankJan(this, "Kim");
-		tank2 = new DemoTankJan(this, "Barack");
+		tank2 = new DemoTank1(this, "Barack");
 		
 		tank1.init(100, 100, 0, loadImage("tank_korea.png"), tank2);
 		tank2.init(width - 100, height - 100, PI, loadImage("tank_usa.png"), tank1);

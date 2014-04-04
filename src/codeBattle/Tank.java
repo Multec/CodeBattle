@@ -40,6 +40,8 @@ public class Tank implements PConstants {
 	private int charged = 60;
 	
 	private PImage img;
+
+	private String tankNaam = "naam";
 	
 	private Tank enemy;
 	
@@ -161,6 +163,9 @@ public class Tank implements PConstants {
 			move_fire = true;
 		}
 	}
+	final public void setNaam(String naam){
+		this.name = naam;
+	}
 	
 	// *********************************************************************************************
 	// Methods to implement in concrete Tank class:
@@ -256,6 +261,9 @@ public class Tank implements PConstants {
 			app.translate(xpos, ypos);
 			app.rotate(angle + HALF_PI);
 			app.image(img, -25, -39);
+			app.textSize(16);
+			app.noStroke();
+			app.text(name, 0, 50);
 			app.noFill();
 			app.stroke(255, 204, 0);
 			// app.ellipse(0, 0, 32, 32);

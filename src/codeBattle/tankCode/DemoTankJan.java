@@ -64,6 +64,7 @@ public class DemoTankJan extends Tank {
 	 * @see codeBattle.Tank#move()
 	 */
 	protected void move() {
+		setNaam("mcAwesome");
 		PApplet app = getApp();
 		ellapsed++;
 		if(ellapsed>30){
